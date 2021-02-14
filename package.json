@@ -4,7 +4,7 @@
   "description": "DataTinder Backend",
   "main": "index.js",
   "scripts": {
-    "starts": "node index",
+    "start": "node index",
     "dev": "nodemon index"
   },
   "repository": {
