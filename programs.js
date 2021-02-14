@@ -1,5 +1,5 @@
-const data = require('./data.json')
+const data = require('./sampleData.json')
 
-const programs = JSON.stringify(data);
+const programs = data;
   
 module.exports = programs;
