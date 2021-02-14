@@ -1,0 +1,25 @@
+{
+  "name": "dataTinderBack",
+  "version": "1.0.0",
+  "description": "DataTinder Backend",
+  "main": "index.js",
+  "scripts": {
+    "starts": "node index",
+    "dev": "nodemon index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bgf122/dataTinderBack.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bgf122/dataTinderBack/issues"
+  },
+  "homepage": "https://github.com/bgf122/dataTinderBack#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.7"
+  }
+}
