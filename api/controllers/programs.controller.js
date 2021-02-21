@@ -7,7 +7,7 @@ exports.get_all_programs = (req, res) => {
 };
 
 exports.get_random_program = (req, res) => {
-	Program.aggregate([{ $sample: { size: 1 } }]).then((program) => {
+	Program.aggregate([{ $sample: { size: Number(req.params.x) } }]).then((program) => {
 		res.json(program);
 	});
 };

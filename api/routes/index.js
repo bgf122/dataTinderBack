@@ -8,6 +8,6 @@ routes.get("/", (req, res) => {
 });
 
 routes.get("/api/programs", programController.get_all_programs);
-routes.get("/api/random-program", programController.get_random_program);
+routes.get("/api/programs/:x", programController.get_random_program);
 
 module.exports = routes;
