@@ -26,6 +26,10 @@ const programSchema = mongoose.Schema(
             type: Object,
             required: true,
         },
+        genres: {
+            type: Object,
+            required: true,
+        },
     },
     {
         collection: "rajapinta",

@@ -21,7 +21,7 @@ exports.get_all_programs = async (req, res) => {
 
 exports.get_program = async (req, res) => {
     try {
-        const program = await Program.findById(req.params.programId);
+        const program = await Program.find({ id: req.params.programId });
         res.json(program);
     } catch (err) {
         res.json({ message:err });
