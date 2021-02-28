@@ -1,12 +1,25 @@
-const express = require('express');
-const mongoose = require('mongoose');
+const express = require("express");
+const mongoose = require("mongoose");
+const morgan = require("morgan");
+const cors = require("cors");
 const app = express();
-require('dotenv/config');
+
+require("dotenv/config");
 const URL = process.env.MONGODB_URI;
+const programsRoute = require("./api/components/programs/routes");
 
-const programsRoute = require('./api/components/programs/routes');
+app.use(
+	morgan(
+		":method :url :status :res[content-length] - :response-time ms :postData "
+	)
+);
 
-app.use('/api/programs', programsRoute);
+morgan.token("postData", function (req, res) {
+	return JSON.stringify(req.body);
+});
+
+app.use(cors());
+app.use("/api/programs", programsRoute);
 
 mongoose
 	.connect(URL, {
