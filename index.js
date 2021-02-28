@@ -1,32 +1,28 @@
 const express = require("express");
-const morgan = require("morgan");
 const mongoose = require("mongoose");
-
-const routes = require("./api/routes/");
+const morgan = require("morgan");
+const cors = require("cors");
 const app = express();
 
-require("dotenv").config();
+require("dotenv/config");
+const URL = process.env.MONGODB_URI;
+const programsRoute = require("./api/components/programs/routes");
 
-const url = process.env.MONGODB_URI;
-app.use(express.json());
-
-// Määrittelee logituksen muodon
 app.use(
 	morgan(
-		":method :url :status :res[content-length] - :response-time ms :requestData "
+		":method :url :status :res[content-length] - :response-time ms :postData "
 	)
 );
 
-// Logituksen tulostus
-morgan.token("requestData", function (req, res) {
+morgan.token("postData", function (req, res) {
 	return JSON.stringify(req.body);
 });
 
-// Rajapinnan juuri
-app.use("/", routes)
+app.use(cors());
+app.use("/api/programs", programsRoute);
 
 mongoose
-	.connect(url, {
+	.connect(URL, {
 		useNewUrlParser: true,
 		useUnifiedTopology: true,
 		useFindAndModify: false,
@@ -38,7 +34,6 @@ mongoose
 	.catch((error) => {
 		console.log("error connecting to MongoDB:", error.message);
 	});
-
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => `App running on port ${PORT}`);
