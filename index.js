@@ -24,6 +24,10 @@ app.use("/api/programs", programsRoute);
 app.use("/api/suggestions", suggestionRoute);
 app.use("/api/mediaurls", mediaUrlRoute);
 
+app.get("/", (req, res) => {
+	res.send("Backend is online.");
+});
+
 mongoose
 	.connect(URL, {
 		useNewUrlParser: true,

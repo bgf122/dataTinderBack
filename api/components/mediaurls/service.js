@@ -13,7 +13,7 @@ const get_media_data = async (id) => {
 };
 // Get encrypted link from
 const fetchEncrypted = async (mediaURL) => {
-	const fetchedData = await fetch(mmediaURL).then((res) => res.json());
+	const fetchedData = await fetch(mediaURL).then((res) => res.json());
 	return fetchedData.data[0].url;
 };
 
