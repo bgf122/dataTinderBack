@@ -1,5 +1,5 @@
 const Program = require("../programs/model");
-const Service = require("./service")
+const Service = require("./service");
 
 exports.get_mediaUrl = async (req, res) => {
 	try {
@@ -9,5 +9,3 @@ exports.get_mediaUrl = async (req, res) => {
 		res.json({ message: err });
 	}
 };
-
-
