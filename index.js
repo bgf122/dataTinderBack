@@ -7,7 +7,8 @@ const app = express();
 require("dotenv/config");
 const URL = process.env.MONGODB_URI;
 const programsRoute = require("./api/components/programs/routes");
-
+const suggestionRoute = require("./api/components/suggestions/routes");
+const mediaUrlRoute = require("./api/components/mediaurls/routes");
 app.use(
 	morgan(
 		":method :url :status :res[content-length] - :response-time ms :postData "
@@ -20,6 +21,8 @@ morgan.token("postData", function (req, res) {
 
 app.use(cors());
 app.use("/api/programs", programsRoute);
+app.use("/api/suggestions", suggestionRoute);
+app.use("/api/mediaurls", mediaUrlRoute);
 
 mongoose
 	.connect(URL, {
