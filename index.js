@@ -1,8 +1,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
+const morganBody = require("morgan-body");
 const app = express();
-const bodyParser = require('body-parser');
+
 
 require("dotenv/config");
 const URL = process.env.MONGODB_URI;
@@ -20,12 +21,12 @@ app.use(
 morgan.token("postData", function (req, res) {
 	return JSON.stringify(req.body);
 });
-
-app.use(bodyParser.json());
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
+app.use(express.json());
+morganBody(app);
+app.use(function (req, res, next) {
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+	next();
 });
 app.use(authentication.verify)
 app.use("/api/preferences", preferenceRoute);
