@@ -27,7 +27,8 @@ exports.verify = (req, res, next) => {
 			.verifyIdToken(token)
 			.then((decodedToken) => {
 				const uid = decodedToken.uid;
-        console.log(uid)
+				res.locals.uid = uid;
+				
 			}).then(next)
 			.catch((error) => {
 				console.log(error.message);
