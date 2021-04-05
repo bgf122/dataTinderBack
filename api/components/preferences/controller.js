@@ -9,7 +9,7 @@ exports.saveUserPreference = async (req, res) => {
             program_id: req.body.program_id,
             swipe: req.body.swipe
         }
-        const savedData = await db.ref('preferences').child(res.locals.uid).push(prefence);
+        const savedData = await db.ref('users').child(res.locals.uid).child('preferences').push(prefence);
         res.json(savedData);
 	} catch (err) {
 		res.json({ message: err });
