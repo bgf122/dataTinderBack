@@ -31,7 +31,6 @@ app.use("/api/suggestions", suggestionRoute);
 app.use("/api/mediaurls", mediaUrlRoute);
 
 app.get("/", (req, res) => {
-	console.log(req.headers.authorization);
 	res.send("Backend is online.");
 });
 
