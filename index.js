@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const morgan = require("morgan");
 const morganBody = require("morgan-body");
 const app = express();
+const cors = require('cors');
 
 
 require("dotenv/config");
@@ -23,11 +24,7 @@ morgan.token("postData", function (req, res) {
 });
 app.use(express.json());
 morganBody(app);
-app.use(function (req, res, next) {
-	res.header("Access-Control-Allow-Origin", "*");
-	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-	next();
-});
+app.use(cors());
 app.use(authentication.verify)
 app.use("/api/preferences", preferenceRoute);
 app.use("/api/programs", programsRoute);
