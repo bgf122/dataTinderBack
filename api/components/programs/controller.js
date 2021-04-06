@@ -2,7 +2,6 @@ const Program = require("./model");
 
 exports.getAllPrograms = async (req, res) => {
 	try {
-		console.log(req.body)
 		const programs = await Program.find();
 		res.json(programs);
 	} catch (err) {

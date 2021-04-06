@@ -19,7 +19,6 @@ admin.initializeApp({
 });
 
 exports.verify = (req, res, next) => {
-
 	const token = req.headers.authorization;
 	admin
 			.auth()
