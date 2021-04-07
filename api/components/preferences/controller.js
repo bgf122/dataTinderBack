@@ -16,20 +16,16 @@ exports.saveUserPreference = async (req, res) => {
 }
 
 exports.getUserPreferences = async (req, res) => {
+
     try {
-        const preferences = await db.ref("users")
+        let data;
+        await db.ref("users")
             .child(res.locals.uid)
             .child("preferences/")
             .once("value", (snapshot) => {
-                let data = [];
-                snapshot.forEach((child) => {
-                    data.push(child.val()
-                    );
-                });
-
-
-            })
-        return res.json({ preferences });
+                data = snapshot.val()
+            });
+        return res.json({ data });
 
     } catch (err) {
         res.sendStatus(400);
