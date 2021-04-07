@@ -18,14 +18,20 @@ exports.saveUserPreference = async (req, res) => {
 exports.getUserPreferences = async (req, res) => {
 
     try {
-        let data;
+        let data = [];
         await db.ref("users")
             .child(res.locals.uid)
             .child("preferences/")
             .once("value", (snapshot) => {
-                data = snapshot.val()
+                // We want the key separately so that the user is able to 'delete' a like / from list.
+                snapshot.forEach((child) => {
+                    data.push({
+                        key: child.key,
+                        data: child.val()
+                    })
+                });
             });
-        return res.json({ data });
+        return res.json(data);
 
     } catch (err) {
         res.sendStatus(400);
