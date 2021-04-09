@@ -16,7 +16,6 @@ exports.saveUserPreference = async (req, res) => {
 }
 
 exports.getUserPreferences = async (req, res) => {
-
     try {
         let data = [];
         await db.ref("users")
