@@ -1,4 +1,4 @@
-const Program = require("../models/programs");
+const Program = require("../models/program");
 
 exports.getAllSeries = async (req, res) => {
 	try {

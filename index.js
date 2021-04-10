@@ -12,7 +12,6 @@ const programsRoute = require("./routes/programs");
 const suggestionsRoute = require("./routes/suggestions");
 const mediaUrlsRoute = require("./routes/mediaUrls");
 const preferencesRoute = require("./routes/preferences");
-const genresRoute = require("./routes/genres");
 const moviesRoute = require("./routes/movies");
 const seriesRoute = require("./routes/series");
 app.use(
@@ -32,7 +31,6 @@ app.use("/api/preferences", preferencesRoute);
 app.use("/api/programs", programsRoute);
 app.use("/api/suggestions", suggestionsRoute);
 app.use("/api/mediaurls", mediaUrlsRoute);
-app.use("/api/genres", genresRoute);
 app.use("/api/movies", moviesRoute);
 app.use("/api/series", seriesRoute);
 
