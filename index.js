@@ -13,6 +13,8 @@ const suggestionsRoute = require("./routes/suggestions");
 const mediaUrlsRoute = require("./routes/mediaUrls");
 const preferencesRoute = require("./routes/preferences");
 const genresRoute = require("./routes/genres");
+const moviesRoute = require("./routes/movies");
+const seriesRoute = require("./routes/series");
 app.use(
 	morgan(
 		":method :url :status :res[content-length] - :response-time ms :postData "
@@ -31,6 +33,8 @@ app.use("/api/programs", programsRoute);
 app.use("/api/suggestions", suggestionsRoute);
 app.use("/api/mediaurls", mediaUrlsRoute);
 app.use("/api/genres", genresRoute);
+app.use("/api/movies", moviesRoute);
+app.use("/api/series", seriesRoute);
 
 app.get("/", (req, res) => {
 	res.send("Backend is online.");

@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const controller = require("../service/preferences");
+const service = require("../service/preferences");
 
-router.post("/", controller.saveUserPreference);
-router.get("/", controller.getUserPreferences);
+router.post("/", service.saveUserPreference);
+router.get("/", service.getUserPreferences);
 
 module.exports = router;
