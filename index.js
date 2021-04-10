@@ -7,7 +7,7 @@ const cors = require('cors');
 
 require("dotenv/config");
 const URL = process.env.MONGODB_URI;
-const authentication = require("./authentication");
+const authentication = require("./authentication/authentication");
 const programsRoute = require("./routes/programs");
 const suggestionsRoute = require("./routes/suggestions");
 const mediaUrlsRoute = require("./routes/mediaUrls");
