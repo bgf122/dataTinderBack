@@ -7,18 +7,21 @@ const userSchema = mongoose.Schema(
 			required: true
 		},
 		data: {
-			programId: {
-				type: String,
-				required: true
-			},
-			type: {
-				type: String,
-				required: true
-			},
-			value: {
-				type: Number,
-				required: true
-			}
+			type: new mongoose.Schema({
+				programId: {
+					type: String,
+					required: false
+				},
+				type: {
+					type: String,
+					required: false
+				},
+				value: {
+					type: Number,
+					required: false
+				}
+			}, { _id : false }),
+			required: false,
 		},
 		displayName: {
 			type: String,

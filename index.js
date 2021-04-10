@@ -11,7 +11,7 @@ const authentication = require("./authentication/authentication");
 const programsRoute = require("./routes/programs");
 const suggestionsRoute = require("./routes/suggestions");
 const mediaUrlsRoute = require("./routes/mediaUrls");
-const preferencesRoute = require("./routes/preferences");
+const likesRoute = require("./routes/likes");
 const moviesRoute = require("./routes/movies");
 const seriesRoute = require("./routes/series");
 app.use(
@@ -27,7 +27,7 @@ app.use(express.json());
 morganBody(app);
 app.use(cors());
 app.use(authentication.verify)
-app.use("/api/preferences", preferencesRoute);
+app.use("/api/likes", likesRoute);
 app.use("/api/programs", programsRoute);
 app.use("/api/suggestions", suggestionsRoute);
 app.use("/api/mediaurls", mediaUrlsRoute);
