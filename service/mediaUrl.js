@@ -1,4 +1,4 @@
-const Service = require("./service");
+const Service = require("./decryptMediaUrl");
 
 exports.getMediaUrl = async (req, res) => {
 	try {

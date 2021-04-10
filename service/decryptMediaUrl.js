@@ -4,7 +4,7 @@ const SECRET = process.env.SECRET;
 const APPID = process.env.APPID;
 const APPKEY = process.env.APPKEY;
 
-const Program = require("../programs/model");
+const Program = require("../models/programs");
 
 // We need to get data from the program to be able to get mediaURL-data.
 const getMediaData = async (id) => {
