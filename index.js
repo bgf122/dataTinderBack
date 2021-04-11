@@ -4,10 +4,11 @@ const morgan = require("morgan");
 const morganBody = require("morgan-body");
 const app = express();
 const cors = require('cors');
+const authentication = require("./authentication/authentication");
+const { initializeApp } = require('./authentication/initializeApp');
 
 require("dotenv/config");
 const URL = process.env.MONGODB_URI;
-const authentication = require("./authentication/authentication");
 const programsRoute = require("./routes/programs");
 const suggestionsRoute = require("./routes/suggestions");
 const mediaUrlsRoute = require("./routes/mediaUrls");
@@ -20,12 +21,13 @@ app.use(
 		":method :url :status :res[content-length] - :response-time ms :postData "
 	)
 );
-
 morgan.token("postData", function (req, res) {
 	return JSON.stringify(req.body);
 });
+
 app.use(express.json());
 morganBody(app);
+initializeApp();
 app.use(cors());
 app.use("/user", userRoute);
 app.use(authentication.verify);
