@@ -8,12 +8,12 @@ exports.createUser = async (req, res) => {
                 email: req.body.email,
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
-                displayName: req.body.email,
+                displayName: `${req.body.firstname} + ${req.body.lastname}`,
                 password: req.body.password,
                 disabled: false,
         })
         res.sendStatus(200);
-        console.log('Successfully created new user:', userRecord.uid);
+        console.log('Successfully created new user:', userRecord);
     } catch (err) {
         res.json(err);
         console.log('Error creating new user:', err);
