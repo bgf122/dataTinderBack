@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const controller = require("./controller");
+const service = require("../service/mediaUrls");
 
-router.get("/:id", controller.get_mediaUrl);
+router.get("/:id", service.getMediaUrl);
 
 module.exports = router;

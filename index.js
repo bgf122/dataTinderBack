@@ -1,14 +1,19 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
-const cors = require("cors");
+const morganBody = require("morgan-body");
 const app = express();
+const cors = require('cors');
 
 require("dotenv/config");
 const URL = process.env.MONGODB_URI;
-const programsRoute = require("./api/components/programs/routes");
-const suggestionRoute = require("./api/components/suggestions/routes");
-const mediaUrlRoute = require("./api/components/mediaurls/routes");
+const authentication = require("./authentication/authentication");
+const programsRoute = require("./routes/programs");
+const suggestionsRoute = require("./routes/suggestions");
+const mediaUrlsRoute = require("./routes/mediaUrls");
+const votesRoute = require("./routes/votes");
+const moviesRoute = require("./routes/movies");
+const seriesRoute = require("./routes/series");
 app.use(
 	morgan(
 		":method :url :status :res[content-length] - :response-time ms :postData "
@@ -18,11 +23,16 @@ app.use(
 morgan.token("postData", function (req, res) {
 	return JSON.stringify(req.body);
 });
-
+app.use(express.json());
+morganBody(app);
 app.use(cors());
+app.use(authentication.verify)
+app.use("/api/votes", votesRoute);
 app.use("/api/programs", programsRoute);
-app.use("/api/suggestions", suggestionRoute);
-app.use("/api/mediaurls", mediaUrlRoute);
+app.use("/api/suggestions", suggestionsRoute);
+app.use("/api/mediaurls", mediaUrlsRoute);
+app.use("/api/movies", moviesRoute);
+app.use("/api/series", seriesRoute);
 
 app.get("/", (req, res) => {
 	res.send("Backend is online.");

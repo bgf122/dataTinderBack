@@ -4,21 +4,21 @@ const SECRET = process.env.SECRET;
 const APPID = process.env.APPID;
 const APPKEY = process.env.APPKEY;
 
-const Program = require("../programs/model");
+const Program = require("../models/program");
 
 // We need to get data from the program to be able to get mediaURL-data.
-const get_media_data = async (id) => {
+const getMediaData = async (id) => {
 	const mediaID = await Program.find({ id: id });
 	return mediaID[0].publication_event.media.id;
 };
-// Get encrypted link from
+// Get encrypted link from YLE
 const fetchEncrypted = async (mediaURL) => {
 	const fetchedData = await fetch(mediaURL).then((res) => res.json());
 	return fetchedData.data[0].url;
 };
 
 exports.getMediaUrl = async (id) => {
-	const mediaID = await get_media_data(id);
+	const mediaID = await getMediaData(id);
 	const mediaURL = `https://external.api.yle.fi/v1/media/playouts.json?program_id=${id}&media_id=${mediaID}&protocol=HLS&app_id=${APPID}&app_key=${APPKEY}`;
 	const encrypted = await fetchEncrypted(mediaURL);
 	const decrypted = await decrypt(encrypted, SECRET);

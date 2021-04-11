@@ -1,6 +1,6 @@
-const Program = require("./model");
+const Program = require("../models/program");
 
-exports.get_all_programs = async (req, res) => {
+exports.getAllPrograms = async (req, res) => {
 	try {
 		const programs = await Program.find();
 		res.json(programs);
@@ -9,7 +9,7 @@ exports.get_all_programs = async (req, res) => {
 	}
 };
 
-exports.get_program = async (req, res) => {
+exports.getProgram = async (req, res) => {
 	try {
 		const program = await Program.find({ id: req.params.id });
 		res.json(program);
