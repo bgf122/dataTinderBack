@@ -23,6 +23,8 @@ exports.verify = (req, res, next) => {
 	const token = req.headers.authorization;
 
 	if (token === "testi") {
+		// Lisätty testiä varten.
+		res.locals.uid = "testi";
 		next();
 	} else {
 		admin

@@ -6,23 +6,22 @@ const userSchema = mongoose.Schema(
 			type: String,
 			required: true
 		},
-		data: {
-			type: new mongoose.Schema({
-				programId: {
-					type: String,
-					required: true
-				},
-				type: {
-					type: String,
-					required: true
-				},
-				value: {
-					type: Number,
-					required: true
-				}
-			}, { _id: false }),
-			required: true,
-		},
+		data: [{
+			_id: false,
+			programId: {
+				type: String,
+				required: true
+			},
+			type: {
+				type: String,
+				required: true
+			},
+			value: {
+				type: Number,
+				required: true
+			}
+		}],
+
 		displayName: {
 			type: String,
 			required: true
