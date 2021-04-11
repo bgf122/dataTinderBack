@@ -27,6 +27,7 @@ morgan.token("postData", function (req, res) {
 app.use(express.json());
 morganBody(app);
 app.use(cors());
+app.use("/user", userRoute);
 app.use(authentication.verify);
 app.use("/api/votes", votesRoute);
 app.use("/api/programs", programsRoute);
@@ -34,7 +35,6 @@ app.use("/api/suggestions", suggestionsRoute);
 app.use("/api/mediaurls", mediaUrlsRoute);
 app.use("/api/movies", moviesRoute);
 app.use("/api/series", seriesRoute);
-app.use("/user", userRoute);
 app.get("/", (req, res) => {
 	res.send("Backend is online.");
 });

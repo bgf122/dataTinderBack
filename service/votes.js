@@ -1,7 +1,6 @@
 const User = require("../models/user");
 
 exports.saveUserData = async (req, res) => {
-
     try {
         await User.updateOne(
             {
