@@ -10,18 +10,18 @@ const userSchema = mongoose.Schema(
 			type: new mongoose.Schema({
 				programId: {
 					type: String,
-					required: false
+					required: true
 				},
 				type: {
 					type: String,
-					required: false
+					required: true
 				},
 				value: {
 					type: Number,
-					required: false
+					required: true
 				}
-			}, { _id : false }),
-			required: false,
+			}, { _id: false }),
+			required: true,
 		},
 		displayName: {
 			type: String,
