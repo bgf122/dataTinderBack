@@ -19,7 +19,7 @@ admin.initializeApp({
 	databaseURL: process.env.FIREBASE_DATABASE_URL
 });
 
-exports.verify = (req, res, next) => {
+exports.verify = async (req, res, next) => {
 	const token = req.headers.authorization;
 
 	if (token === "testi") {
@@ -27,20 +27,18 @@ exports.verify = (req, res, next) => {
 		res.locals.uid = "testi";
 		next();
 	} else {
-		admin
-			.auth()
-			// If firebase-module is able to verify token -> goes forward. Otherwise catches error returns 403.
-			.verifyIdToken(token)
-			.then((decodedToken) => {
-				const uid = decodedToken.uid;
-				res.locals.uid = uid;
-
-			}).then(next)
-			.catch((error) => {
-
-				console.log(error.message);
-				res.status(403).json({ "error": "Invalid or bad token" })
-			});
+		// If firebase-module is able to verify token -> goes forward. Otherwise catches error returns 403.
+		try {
+			const decodedToken = await admin
+				.auth()
+				.verifyIdToken(token)
+			const uid = decodedToken.uid;
+			res.locals.uid = uid
+			next();
+		} catch (err) {
+			console.log(err.message);
+			res.status(403).json({ "error": "Invalid or bad token" })
+		}
 	}
 }
 

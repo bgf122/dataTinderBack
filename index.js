@@ -14,6 +14,7 @@ const mediaUrlsRoute = require("./routes/mediaUrls");
 const votesRoute = require("./routes/votes");
 const moviesRoute = require("./routes/movies");
 const seriesRoute = require("./routes/series");
+const userRoute = require("./routes/createUser");
 app.use(
 	morgan(
 		":method :url :status :res[content-length] - :response-time ms :postData "
@@ -26,14 +27,14 @@ morgan.token("postData", function (req, res) {
 app.use(express.json());
 morganBody(app);
 app.use(cors());
-app.use(authentication.verify)
+app.use(authentication.verify);
 app.use("/api/votes", votesRoute);
 app.use("/api/programs", programsRoute);
 app.use("/api/suggestions", suggestionsRoute);
 app.use("/api/mediaurls", mediaUrlsRoute);
 app.use("/api/movies", moviesRoute);
 app.use("/api/series", seriesRoute);
-
+app.use("/user", userRoute);
 app.get("/", (req, res) => {
 	res.send("Backend is online.");
 });
