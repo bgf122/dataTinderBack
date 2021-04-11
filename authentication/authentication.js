@@ -14,7 +14,7 @@ exports.verify = async (req, res, next) => {
 				.auth()
 				.verifyIdToken(token)
 			const uid = decodedToken.uid;
-			res.locals.uid = uid
+			res.locals.user = await admin.auth().getUser(uid);
 			next();
 		} catch (err) {
 			console.log(err.message);

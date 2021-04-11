@@ -15,7 +15,7 @@ exports.createUser = async (req, res) => {
         res.sendStatus(200);
         console.log('Successfully created new user:', userRecord.uid);
     } catch (err) {
-        res.sendStatus(403);
+        res.json(err);
         console.log('Error creating new user:', err);
     }
 }

@@ -1,11 +1,12 @@
 const User = require("../models/user");
 
 exports.saveUserData = async (req, res) => {
+ 
     try {
         await User.updateOne(
             {
-                "_id": res.locals.uid,
-                "displayName": req.body.displayName
+                "_id": res.locals.user.uid,
+                "displayName": res.locals.user.displayName
             },
             {
                 $push: {
