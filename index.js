@@ -29,7 +29,7 @@ app.use(express.json());
 morganBody(app);
 initializeApp();
 app.use(cors());
-app.use("/user", userRoute);
+app.use("/register", userRoute);
 app.use(authentication.verify);
 app.use("/api/votes", votesRoute);
 app.use("/api/programs", programsRoute);
