@@ -8,7 +8,7 @@ exports.createUser = async (req, res) => {
                 email: req.body.email,
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
-                displayName: `${req.body.firstname} + ${req.body.lastname}`,
+                displayName: `${req.body.firstName} + ${req.body.lastName}`,
                 password: req.body.password,
                 disabled: false,
         })
