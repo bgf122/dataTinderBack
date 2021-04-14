@@ -16,6 +16,7 @@ const votesRoute = require("./routes/votes");
 const moviesRoute = require("./routes/movies");
 const seriesRoute = require("./routes/series");
 const userRoute = require("./routes/createUser");
+const kmeansRoute = require("./routes/kmeans");
 app.use(
 	morgan(
 		":method :url :status :res[content-length] - :response-time ms :postData "
@@ -36,6 +37,7 @@ app.use("/api/suggestions", authentication.verify, suggestionsRoute);
 app.use("/api/mediaurls", authentication.verify, mediaUrlsRoute);
 app.use("/api/movies", authentication.verify, moviesRoute);
 app.use("/api/series", authentication.verify, seriesRoute);
+app.use("/api/kmeans", authentication.verify, kmeansRoute);
 app.get("/", (req, res) => {
 	res.send("Backend is online.");
 });
