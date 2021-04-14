@@ -1,8 +1,9 @@
-const express = require("express");
-const router = express.Router();
-const service = require("../service/votes");
+const express = require('express');
 
-router.post("/", service.saveUserData);
-router.get("/", service.getUserData);
+const router = express.Router();
+const service = require('../service/votes');
+
+router.post('/', service.saveUserData);
+router.get('/', service.getUserData);
 
 module.exports = router;

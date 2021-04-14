@@ -1,7 +1,8 @@
-const express = require("express");
-const router = express.Router();
-const service = require("../service/suggestions");
+const express = require('express');
 
-router.get("/:amount?", service.getSuggestions);
+const router = express.Router();
+const service = require('../service/suggestions');
+
+router.get('/:amount?', service.getSuggestions);
 
 module.exports = router;

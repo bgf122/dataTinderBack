@@ -1,43 +1,29 @@
-
-const Program = require("../models/program");
-const User = require("../models/user");
 const KNNRecommender = require('knn-recommender');
-const kNNRecommender = new KNNRecommender.default(null)
+const Program = require('../models/program');
+const User = require('../models/user');
 
+const kNNRecommender = new KNNRecommender.default(null);
 
-exports.testKmeans = async (req, res) => {
+exports.initializeKmeans = async () => {
+  const userData = await User.find({});
+  const programData = await Program.find({});
+  programData.forEach((program) => kNNRecommender.addNewItemToDataset(program._id));
+  userData.forEach((user) => kNNRecommender.addNewEmptyUserToDataset(user._id));
 
-    try {
-        const userData = await User.find({})
-        const programData = await Program.find({})
-
-        programData.forEach(program => kNNRecommender.addNewItemToDataset(program._id))
-
-        userData.forEach(user => kNNRecommender.addNewEmptyUserToDataset(
-            user._id
-        ))
-
-        userData.forEach(user => user.data.forEach(program => {
-
-            if (program.value === 1) {
-                kNNRecommender.addLikeForUserToAnItem(user._id, program.programId);
-            } else if (program.value === -1) {
-                kNNRecommender.addDislikeForUserToAnItem(user._id, program.programId);
-            } else {
-                console.log("Tuleeko tänne jotain?")
-            }
-
-        }))
-
-        kNNRecommender.initializeRecommenderForUserId(req.body.id)
-    } catch (err) {
-        kNNRecommender.initializeRecommenderForUserId(req.body.id)
+  userData.forEach((user) => user.data.forEach((program) => {
+    if (program.value === 1) {
+      kNNRecommender.addLikeForUserToAnItem(user._id, program.programId);
+    } else if (program.value === -1) {
+      kNNRecommender.addDislikeForUserToAnItem(user._id, program.programId);
     }
+  }));
 
+  await kNNRecommender.initializeRecommender().then(() => {
+    console.log('Suosittelija initialisoitu.');
+  });
+};
 
-
-    const userRecommendations = kNNRecommender.generateNNewUniqueRecommendationsForUserId(req.body.id, 1)
-
-    return res.json({ "recommendation": userRecommendations[0].itemId })
-}
-
+exports.getKmeansSuggestion = async (req, res) => {
+  const recommendations = kNNRecommender.generateNNewUniqueRecommendationsForUserId(req.body.id, 1);
+  return res.json({ recommendations });
+};
