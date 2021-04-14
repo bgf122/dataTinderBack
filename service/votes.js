@@ -1,9 +1,10 @@
 const User = require('../models/user');
+const Service = require('./kmeans');
 
 exports.saveUserData = async (req, res) => {
   console.log(res.locals.user.displayName);
   try {
-    await User.updateOne(
+    const newItem = await User.updateOne(
       {
         _id: res.locals.user.uid,
         displayName: res.locals.user.displayName,
@@ -18,7 +19,13 @@ exports.saveUserData = async (req, res) => {
         },
       }, { upsert: true },
     );
-    res.sendStatus(200);
+    if (req.body.value === 1) {
+      Service.addLikeForUser(res.locals.user.uid, req.body.programId);
+    } else {
+      Service.addDislikeForUser(res.locals.user.uid, req.body.programId);
+    }
+
+    res.json({ savedVote: newItem });
   } catch (err) {
     console.log(err);
     res.json({ message: 'Ei toimi' });

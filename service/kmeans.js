@@ -27,3 +27,17 @@ exports.getKmeansSuggestion = async (req, res) => {
   const recommendations = kNNRecommender.generateNNewUniqueRecommendationsForUserId(req.body.id, 1);
   return res.json({ recommendations });
 };
+
+exports.addLikeForUser = async (userID, programId) => {
+  await kNNRecommender.addLikeForUser(userID, programId);
+  await kNNRecommender.initializeRecommender().then(() => {
+    console.log('Suosittelija initialisoitu.');
+  });
+};
+
+exports.addDislikeForUser = async (userID, programId) => {
+  await kNNRecommender.addDislikeForUser(userID, programId);
+  await kNNRecommender.initializeRecommender().then(() => {
+    console.log('Suosittelija initialisoitu.');
+  });
+};
