@@ -1,4 +1,5 @@
 const admin = require('firebase-admin');
+const Service = require('../service/kmeans');
 
 exports.createUser = async (req, res) => {
   try {
@@ -12,6 +13,7 @@ exports.createUser = async (req, res) => {
         password: req.body.password,
         disabled: false,
       });
+    Service.addNewUser(req.body.email);
     res.sendStatus(200);
   } catch (err) {
     res.json({ error: err.message });

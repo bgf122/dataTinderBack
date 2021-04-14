@@ -41,3 +41,7 @@ exports.addDislikeForUser = async (userID, programId) => {
     console.log('Suosittelija initialisoitu.');
   });
 };
+
+exports.addNewUser = async (userID) => {
+  await kNNRecommender.addNewEmptyUserToDataset(userID);
+};
