@@ -7,31 +7,37 @@ const kNNRecommender = new KNNRecommender.default(null)
 
 exports.testKmeans = async (req, res) => {
 
-    const userData = await User.find({})
-    const programData = await Program.find({})
+    try {
+        const userData = await User.find({})
+        const programData = await Program.find({})
 
-    console.log(userData[0].data)
-    console.log(programData[0]._id)
+        programData.forEach(program => kNNRecommender.addNewItemToDataset(program._id))
 
-    programData.forEach(program => kNNRecommender.addNewItemToDataset(program._id))
+        userData.forEach(user => kNNRecommender.addNewEmptyUserToDataset(
+            user._id
+        ))
 
-    userData.forEach(user => kNNRecommender.addNewEmptyUserToDataset(
-        user._id
-    ))
+        userData.forEach(user => user.data.forEach(program => {
 
-    userData.forEach(user => user.data.forEach(program =>
-        
-        console.log(user._id, program.programId, program.value)))
+            if (program.value === 1) {
+                kNNRecommender.addLikeForUserToAnItem(user._id, program.programId);
+            } else if (program.value === -1) {
+                kNNRecommender.addDislikeForUserToAnItem(user._id, program.programId);
+            } else {
+                console.log("Tuleeko tänne jotain?")
+            }
 
-    //kNNRecommender.initializeRecommenderForUserId(req.body.id)
+        }))
 
-    //const userRecommendations = kNNRecommender.generateNNewUniqueRecommendationsForUserId(req.body.id, 1)
+        kNNRecommender.initializeRecommenderForUserId(req.body.id)
+    } catch (err) {
+        kNNRecommender.initializeRecommenderForUserId(req.body.id)
+    }
 
 
 
+    const userRecommendations = kNNRecommender.generateNNewUniqueRecommendationsForUserId(req.body.id, 1)
 
-    return res.json({
-        "recommendation": `new recommendation for user 1 }`
-    })
+    return res.json({ "recommendation": userRecommendations[0].itemId })
 }
 
