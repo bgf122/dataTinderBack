@@ -2,7 +2,6 @@ const User = require('../models/user');
 const Service = require('./kmeans');
 
 exports.saveUserData = async (req, res) => {
-  console.log(res.locals.user.displayName);
   try {
     const newItem = await User.updateOne(
       {
@@ -27,13 +26,12 @@ exports.saveUserData = async (req, res) => {
 
     res.json({ savedVote: newItem });
   } catch (err) {
-    console.log(err);
+    console.log(err.message);
     res.json({ message: 'Ei toimi' });
   }
 };
 
 exports.getUserData = async (req, res) => {
-  console.log(req.body._id);
   try {
     const data = await User.find({ _id: req.body._id });
     res.json(data);

@@ -29,14 +29,14 @@ exports.getKmeansSuggestion = async (req, res) => {
 };
 
 exports.addLikeForUser = async (userID, programId) => {
-  await kNNRecommender.addLikeForUser(userID, programId);
+  await kNNRecommender.addLikeForUserToAnItem(userID, programId);
   await kNNRecommender.initializeRecommender().then(() => {
     console.log('Suosittelija initialisoitu.');
   });
 };
 
 exports.addDislikeForUser = async (userID, programId) => {
-  await kNNRecommender.addDislikeForUser(userID, programId);
+  await kNNRecommender.addDislikeForUserToAnItem(userID, programId);
   await kNNRecommender.initializeRecommender().then(() => {
     console.log('Suosittelija initialisoitu.');
   });
