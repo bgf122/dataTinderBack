@@ -26,8 +26,7 @@ exports.saveUserData = async (req, res) => {
 
     res.json({ savedVote: newItem });
   } catch (err) {
-    console.log(err.message);
-    res.json({ message: 'Ei toimi' });
+    res.json({ error: err.message });
   }
 };
 
@@ -36,6 +35,6 @@ exports.getUserData = async (req, res) => {
     const data = await User.find({ _id: req.body._id });
     res.json(data);
   } catch (err) {
-    res.sendStatus(400);
+    res.json({ error: err.message });
   }
 };

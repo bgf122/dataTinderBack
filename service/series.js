@@ -5,6 +5,6 @@ exports.getAllSeries = async (req, res) => {
     const series = await Program.find({ partOfSeries: { $exists: true } });
     res.json(series);
   } catch (err) {
-    res.json({ message: err });
+    res.json({ error: err.message });
   }
 };

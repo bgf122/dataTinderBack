@@ -16,7 +16,7 @@ exports.verify = async (req, res, next) => {
       res.locals.user = await admin.auth().getUser(uid);
       next();
     } catch (err) {
-      res.status(403).json({ error: err.message });
+      res.json({ error: err.message });
     }
   }
 };
