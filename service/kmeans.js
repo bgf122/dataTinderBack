@@ -30,21 +30,18 @@ exports.getKmeansSuggestion = async (req, res) => {
 
 exports.addLikeForUser = async (userID, programId) => {
   await kNNRecommender.addLikeForUserToAnItem(userID, programId);
-  await kNNRecommender.initializeRecommender().then(() => {
-    console.log('Suosittelija initialisoitu. Tykkäysswaippi.');
-  });
+  await kNNRecommender.initializeRecommenderForUserId(userID);
+  console.log('Suosittelija initialisoitu. Tykkäysswaippi.');
 };
 
 exports.addDislikeForUser = async (userID, programId) => {
   await kNNRecommender.addDislikeForUserToAnItem(userID, programId);
-  await kNNRecommender.initializeRecommender().then(() => {
-    console.log('Suosittelija initialisoitu. Negaswaippi');
-  });
+  await kNNRecommender.initializeRecommenderForUserId(userID);
+  console.log('Suosittelija initialisoitu. Tykkäysswaippi.');
 };
 
 exports.addNewUser = async (userID) => {
   await kNNRecommender.addNewEmptyUserToDataset(userID);
-  await kNNRecommender.initializeRecommender().then(() => {
-    console.log('Suosittelija initialisoitu. Uusi käyttäjä');
-  });
+  await kNNRecommender.initializeRecommenderForUserId(userID);
+  console.log('Suosittelija initialisoitu. Tykkäysswaippi.');
 };
