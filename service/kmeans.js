@@ -23,7 +23,7 @@ exports.initializeKmeans = async () => {
   });
 };
 
-exports.getKmeansSuggestion = async (req, res) => {
+exports.getKmeansSuggestion = async (req) => {
   const recommendations = kNNRecommender.generateNNewUniqueRecommendationsForUserId(req.body.id, 1);
   const recommendedProgram = await Program.findById(recommendations[0].itemId);
   return recommendedProgram._doc;
