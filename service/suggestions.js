@@ -24,7 +24,7 @@ exports.getSuggestions = async (req, res) => {
 
   } catch (err) {
     console.log("getSuggestions")
-    res.json({ error: err.message });
+    return res.json({ error: err.message });
   
   }
 };
