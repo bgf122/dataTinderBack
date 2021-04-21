@@ -8,7 +8,7 @@ exports.getSuggestions = async (req, res) => {
     const user = await User.findById(res.locals.user.uid) || { data: [] } // autentikoitu käyttäjä
     const userSwipeCount = user.data.length;
    
-    if (userSwipeCount < 5 || userSwipeCount % 5 === 0) {
+    if (userSwipeCount < 5 || userSwipeCount % 5 !== 0) {
       // käyttäjällä on alle 5 swaippia tai kokonaismäärä ei ole jaollinen 5:llä.
       // palautetaan satunnainen ohjelma.
       const suggestions = await Program.aggregate([
