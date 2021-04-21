@@ -1,5 +1,6 @@
 const admin = require('firebase-admin');
 const Service = require('../service/kmeans');
+const User = require('../models/user')
 
 exports.createUser = async (req, res) => {
   try {

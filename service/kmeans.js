@@ -11,6 +11,7 @@ exports.initializeKmeans = async () => {
   userData.forEach((user) => kNNRecommender.addNewEmptyUserToDataset(user._id));
 
   userData.forEach((user) => user.data.forEach((program) => {
+
     if (program.value === 1) {
       kNNRecommender.addLikeForUserToAnItem(user._id, program.programId);
     } else if (program.value === -1) {
@@ -24,9 +25,24 @@ exports.initializeKmeans = async () => {
 };
 
 exports.getKmeansSuggestion = async (req) => {
-  const recommendations = kNNRecommender.generateNNewUniqueRecommendationsForUserId(req.body.id, 1);
-  const recommendedProgram = await Program.findById(recommendations[0].itemId);
-  return recommendedProgram._doc;
+
+  await kNNRecommender.initializeRecommenderForUserId(req.body.id);
+
+  try {
+    const recommendations = kNNRecommender.generateNNewUniqueRecommendationsForUserId(req.body.id, 1);
+
+    if (recommendations.length > 0 && recommendations !== null) {
+      const recommendedProgram = await Program.findById(recommendations[0].itemId);
+      return recommendedProgram._doc;
+    } else {
+      return [];
+    }
+  } catch (err) {
+    res.json({ error: err.message })
+  
+
+  }
+
 };
 
 exports.addLikeForUser = async (userID, programId) => {
@@ -44,5 +60,5 @@ exports.addDislikeForUser = async (userID, programId) => {
 exports.addNewUser = async (userID) => {
   await kNNRecommender.addNewEmptyUserToDataset(userID);
   await kNNRecommender.initializeRecommenderForUserId(userID);
-  console.log('Suosittelija initialisoitu. Tykkäysswaippi.');
+  console.log('Suosittelija initialisoitu. Uusi käyttäjä lisätty.');
 };

@@ -4,9 +4,10 @@ const recommendationsService = require('./kmeans');
 
 exports.getSuggestions = async (req, res) => {
   try {
-    const user = await User.findById(res.locals.user.uid); // autentikoitu käyttäjä
-    const userSwipeCount = user.data.length; // käyttäjän swaippien kokonaismäärä
-
+    // Puukkoa, jos uusi käyttäjä niin ei löydy vielä userista sitä.
+    const user = await User.findById(res.locals.user.uid) || { data: [] } // autentikoitu käyttäjä
+    const userSwipeCount = user.data.length;
+   
     if (userSwipeCount > 0 && userSwipeCount % 5 === 0) {
       // käyttäjällä on tämän requestin hetkellä vähintään 5 swaippia ja kokonaismäärä on jaollinen 5:llä.
       // palautetaan KNN recommenderin suosittelema ohjelma.
@@ -21,6 +22,8 @@ exports.getSuggestions = async (req, res) => {
       res.json(suggestions.map((suggestion) => ({ ...suggestion, suggestionType: 'random' })));
     }
   } catch (err) {
+    console.log("getSuggestions")
     res.json({ error: err.message });
+  
   }
 };
