@@ -35,7 +35,7 @@ exports.getKmeansSuggestion = async (req) => {
       const recommendedProgram = await Program.findById(recommendations[0].itemId);
       return recommendedProgram._doc;
     } else {
-      return [];
+      return null;
     }
   } catch (err) {
     res.json({ error: err.message })
