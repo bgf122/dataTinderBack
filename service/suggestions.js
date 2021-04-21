@@ -5,8 +5,8 @@ const recommendationsService = require('./kmeans');
 exports.getSuggestions = async (req, res) => {
   try {
     // Puukkoa, jos uusi käyttäjä niin ei löydy vielä userista sitä.
-    const user = await User.findById(res.locals.user.uid) || { data: [] } // autentikoitu käyttäjä
-    const userSwipeCount = user.data.length;
+    const userData = await User.findById(res.locals.user.uid) || { data: [] } // autentikoitu käyttäjä
+    const userSwipeCount = userData.data.length;
    
     if (userSwipeCount < 5 || userSwipeCount % 5 !== 0) {
       // käyttäjällä on alle 5 swaippia tai kokonaismäärä ei ole jaollinen 5:llä.
@@ -14,7 +14,7 @@ exports.getSuggestions = async (req, res) => {
       const suggestions = await Program.aggregate([
         { $sample: { size: Number(req.params.amount || 1) } },
       ]);
-      return await res.json(suggestions.map((suggestion) => ({ ...suggestion, suggestionType: 'random' })));
+      return res.json([{ ...suggestions, suggestionType: 'random' }]);
     }
 
     // käyttäjällä on tämän requestin hetkellä vähintään 5 swaippia ja kokonaismäärä on jaollinen 5:llä.

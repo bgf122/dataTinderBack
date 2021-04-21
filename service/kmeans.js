@@ -25,8 +25,9 @@ exports.initializeKmeans = async () => {
 };
 
 exports.getKmeansSuggestion = async (req) => {
-
+  const userData = await User.find({});
   await kNNRecommender.initializeRecommenderForUserId(req.body.id);
+  console.log(userData);
 
   try {
     const recommendations = kNNRecommender.generateNNewUniqueRecommendationsForUserId(req.body.id, 1);
