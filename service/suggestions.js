@@ -20,7 +20,7 @@ exports.getSuggestions = async (req, res) => {
     // käyttäjällä on tämän requestin hetkellä vähintään 5 swaippia ja kokonaismäärä on jaollinen 5:llä.
     // palautetaan KNN recommenderin suosittelema ohjelma.
     const recommendation = await recommendationsService.getKmeansSuggestion({ ...req, body: { id: res.locals.user.uid } }, res);
-    return res.json([{ ...recommendation, suggestionType: 'match' }]);
+    return await res.json([{ ...recommendation, suggestionType: 'match' }]);
 
   } catch (err) {
     console.log("getSuggestions")
