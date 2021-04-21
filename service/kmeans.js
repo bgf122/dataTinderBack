@@ -25,14 +25,10 @@ exports.initializeKmeans = async () => {
 };
 
 exports.getKmeansSuggestion = async (req) => {
-  const userData = await User.findById(req.body.id);
   await kNNRecommender.initializeRecommenderForUserId(req.body.id);
-  const excludedPrograms = []
-
-  await userData.data.forEach((program) => [ ...excludedPrograms, program.ProgramId ])
-
+  
   try {
-    const recommendations = kNNRecommender.generateNNewUniqueRecommendationsForUserId(req.body.id, 1, excludedPrograms);
+    const recommendations = kNNRecommender.generateNNewUniqueRecommendationsForUserId(req.body.id, 1);
 
     if (recommendations.length > 0 && recommendations !== null) {
       const recommendedProgram = await Program.findById(recommendations[0].itemId);
