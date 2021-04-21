@@ -14,8 +14,8 @@ exports.getSuggestions = async (req, res) => {
       const suggestions = await Program.aggregate([
         { $sample: { size: Number(req.params.amount || 1) } },
       ]);
-      const finalSuggestion = await suggestions.map((suggestion) => ({ ...suggestion, suggestionType: 'random' }))
-      return res.json(finalSuggestion);
+      const finalSuggestion = suggestions.map((suggestion) => ({ ...suggestion, suggestionType: 'random' }))
+      return await res.json(finalSuggestion);
     }
 
     // käyttäjällä on tämän requestin hetkellä vähintään 5 swaippia ja kokonaismäärä on jaollinen 5:llä.
