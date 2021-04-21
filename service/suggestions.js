@@ -14,17 +14,17 @@ exports.getSuggestions = async (req, res) => {
       const suggestions = await Program.aggregate([
         { $sample: { size: Number(req.params.amount || 1) } },
       ]);
-      res.json(suggestions.map((suggestion) => ({ ...suggestion, suggestionType: 'random' })));
+      return await res.json(suggestions.map((suggestion) => ({ ...suggestion, suggestionType: 'random' })));
     }
 
     // käyttäjällä on tämän requestin hetkellä vähintään 5 swaippia ja kokonaismäärä on jaollinen 5:llä.
     // palautetaan KNN recommenderin suosittelema ohjelma.
     const recommendation = await recommendationsService.getKmeansSuggestion({ ...req, body: { id: res.locals.user.uid } }, res);
-    res.json([{ ...recommendation, suggestionType: 'match' }]);
+    return res.json([{ ...recommendation, suggestionType: 'match' }]);
 
   } catch (err) {
     console.log("getSuggestions")
-    res.json({ error: err.message });
+    return res.json({ error: err.message });
   
   }
 };
