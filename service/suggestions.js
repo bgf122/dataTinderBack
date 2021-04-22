@@ -11,10 +11,22 @@ exports.getSuggestions = async (req, res) => {
     if (userSwipeCount < 5 || userSwipeCount % 5 !== 0) {
       // käyttäjällä on alle 5 swaippia tai kokonaismäärä ei ole jaollinen 5:llä.
       // palautetaan satunnainen ohjelma.
-      const suggestions = await Program.aggregate([
-        { $sample: { size: Number(req.params.amount || 1) } },
-      ]);
-      return await res.json(suggestions.map((suggestion) => ({ ...suggestion, suggestionType: 'random' })));
+      const swiped = await User.aggregate([
+        { $match: { _id: res.locals.user.uid }}, 
+        { $unwind: "$data"},
+        { $group: { _id: "$data.programId"}}
+      ])
+  
+      const Ids = swiped.map((show) => {
+        return show._id
+      })
+  
+      const random = await Program.aggregate([
+        { $match: { _id: { $nin: Ids } } },
+        { $sample: { size : 1}}
+      ])
+
+      return await res.json(random.map((random) => ({ ...random, suggestionType: 'random' })));
     }
 
     // käyttäjällä on tämän requestin hetkellä vähintään 5 swaippia ja kokonaismäärä on jaollinen 5:llä.
