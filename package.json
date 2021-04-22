@@ -5,7 +5,9 @@
 	"main": "./src/index.js",
 	"scripts": {
 		"start": "node index",
-		"dev": "nodemon index"
+		"dev": "nodemon index",
+		"lint": "eslint .",
+		"fix": "eslint . --fix"
 	},
 	"repository": {
 		"type": "git",
@@ -20,14 +22,19 @@
 	"homepage": "https://github.com/bgf122/dataTinderBack#readme",
 	"dependencies": {
 		"cors": "^2.8.5",
-		"crypto-js": "^4.0.0",
 		"dotenv": "^8.2.0",
 		"express": "^4.17.1",
 		"firebase-admin": "^9.5.0",
+		"knn-recommender": "^1.0.2",
 		"mongoose": "^5.11.17",
 		"morgan": "^1.10.0",
 		"morgan-body": "^2.6.5",
 		"node-fetch": "^2.6.1",
 		"nodemon": "^2.0.7"
+	},
+	"devDependencies": {
+		"eslint": "^7.24.0",
+		"eslint-config-airbnb-base": "^14.2.1",
+		"eslint-plugin-import": "^2.22.1"
 	}
 }

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const service = require('../service/series');
+const service = require('../service/kmeans');
 
-router.get('/', service.getAllSeries);
+router.get('/', service.getKmeansSuggestion);
 
 module.exports = router;
