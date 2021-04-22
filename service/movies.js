@@ -14,11 +14,12 @@ exports.getPopularMovies = async (req, res) => {
   try {
     const userData = await User.aggregate([
       { $unwind: '$data' },
+      { $match: { 'data.value': 1 } },
       { $group: { _id: '$data.programId', count: { $sum: 1 } } },
       { $sort: { count: -1 } },
       { $limit: 10 },
     ]);
-
+    console.log(userData);
     const programData = async () => Promise.all(userData.map((program) => getSingleProgram(program._id)));
 
     return programData().then((data) => res.json(data));
