@@ -21,11 +21,6 @@ const userSchema = mongoose.Schema(
         required: true,
       },
     }],
-
-    displayName: {
-      type: String,
-      required: true,
-    },
   },
   {
     collection: 'userdata',

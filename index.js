@@ -11,7 +11,7 @@ const { initializeRecommender } = require('./service/recommender');
 
 require('dotenv/config');
 
-const URL = process.env.MONGODB_URI;
+const URL = process.env.TEST_MONGO;
 const programsRoute = require('./routes/programs');
 const suggestionsRoute = require('./routes/suggestions');
 const votesRoute = require('./routes/votes');

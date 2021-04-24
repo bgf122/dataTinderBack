@@ -6,7 +6,6 @@ exports.saveUserData = async (req, res) => {
     const newItem = await User.updateOne(
       {
         _id: res.locals.uid,
-        displayName: res.locals.user.displayName,
       },
       {
         $push: {
