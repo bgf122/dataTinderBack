@@ -5,7 +5,7 @@ exports.saveUserData = async (req, res) => {
   try {
     const newItem = await User.updateOne(
       {
-        _id: res.locals.user.uid,
+        _id: res.locals.uid,
         displayName: res.locals.user.displayName,
       },
       {
@@ -19,9 +19,9 @@ exports.saveUserData = async (req, res) => {
       }, { upsert: true },
     );
     if (req.body.value === 1) {
-      Service.addLikeForUser(res.locals.user.uid, req.body.programId);
+      Service.addLikeForUser(res.locals.uid, req.body.programId);
     } else {
-      Service.addDislikeForUser(res.locals.user.uid, req.body.programId);
+      Service.addDislikeForUser(res.locals.uid, req.body.programId);
     }
 
     res.json({ savedVote: newItem });
