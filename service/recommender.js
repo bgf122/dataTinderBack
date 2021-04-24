@@ -4,44 +4,44 @@ const User = require('../models/user');
 
 const kNNRecommender = new KNNRecommender.default(null);
 
-exports.initializeKmeans = async () => {
+exports.initializeRecommender = async () => {
   const userData = await User.find({});
-  const programData = await Program.find({});
-  programData.forEach((program) => kNNRecommender.addNewItemToDataset(program._id));
+  const programData = await Program.aggregate([
+    { $project: { subject: { $concatArrays: ['$subject'] } } },
+  ]);
+
+  const genres = await Program.distinct('subject.title.fi');
+  programData.forEach((genre) => kNNRecommender.addNewItemToDataset(genre._id));
+  programData.forEach((program) => kNNRecommender.addNewEmptyItemAsRowToDataset(program._id));
+  genres.forEach((genre) => kNNRecommender.addNewItemCharacteristicToDataset(genre));
   userData.forEach((user) => kNNRecommender.addNewEmptyUserToDataset(user._id));
-
   userData.forEach((user) => user.data.forEach((program) => {
-
     if (program.value === 1) {
       kNNRecommender.addLikeForUserToAnItem(user._id, program.programId);
     } else if (program.value === -1) {
       kNNRecommender.addDislikeForUserToAnItem(user._id, program.programId);
     }
   }));
-
-  await kNNRecommender.initializeRecommender().then(() => {
-    console.log('Suosittelija initialisoitu.');
-  });
+  programData.forEach((genre) => genre.subject.forEach((subject) => {
+    try {
+      kNNRecommender.addCharacteristicForItem(genre._id, subject.title.fi);
+    } catch (err) {
+      console.log(err.message);
+    }
+  }));
+  console.log('Lisätty genret');
 };
 
-exports.getKmeansSuggestion = async (req) => {
-  await kNNRecommender.initializeRecommenderForUserId(req.body.id);
-  
+exports.getRecommendation = async (req, res) => {
+  await kNNRecommender.initializeRecommenderForUserId(res.locals.uid);
+
   try {
-    const recommendations = kNNRecommender.generateNNewUniqueRecommendationsForUserId(req.body.id, 1);
-
-    if (recommendations.length > 0 && recommendations !== null) {
-      const recommendedProgram = await Program.findById(recommendations[0].itemId);
-      return recommendedProgram._doc;
-    } else {
-      return null;
-    }
+    const recommendations = kNNRecommender.generateNNewUniqueRecommendationsForUserId(res.locals.uid, 1);
+    const recommendedProgram = await Program.findById(recommendations[0].itemId);
+    return recommendedProgram._doc;
   } catch (err) {
-    res.json({ error: err.message })
-  
-
+    return res.json({ error: err.message });
   }
-
 };
 
 exports.addLikeForUser = async (userID, programId) => {
@@ -60,4 +60,11 @@ exports.addNewUser = async (userID) => {
   await kNNRecommender.addNewEmptyUserToDataset(userID);
   await kNNRecommender.initializeRecommenderForUserId(userID);
   console.log('Suosittelija initialisoitu. Uusi käyttäjä lisätty.');
+};
+
+exports.getSimilarItems = async (req, res) => {
+  await kNNRecommender.initializeRecommenderForItemId(req.body.programId);
+  const similarItems = await kNNRecommender.getNNearestNeighboursForItemId(req.body.programId, 10);
+
+  return res.json(similarItems);
 };

@@ -1,22 +1,16 @@
-const admin = require('firebase-admin');
-
 exports.verify = async (req, res, next) => {
+  console.log(req.headers.authorization);
   const token = req.headers.authorization;
-
-  if (token === 'testi') {
+  try {
+    if (token === 'testi') {
     // Lisätty testiä varten.
-    res.locals.uid = 'testi';
-    next();
-  } else {
-    try {
-      const decodedToken = await admin
-        .auth()
-        .verifyIdToken(token);
-      const { uid } = decodedToken;
-      res.locals.user = await admin.auth().getUser(uid);
+      res.locals.uid = 'testi';
       next();
-    } catch (err) {
-      res.json({ error: err.message });
+    } else {
+      res.locals.uid = token;
+      next();
     }
+  } catch (err) {
+    res.json({ error: err.message });
   }
 };

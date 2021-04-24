@@ -1,5 +1,5 @@
 const User = require('../models/user');
-const Service = require('./kmeans');
+const Service = require('./recommender');
 
 exports.saveUserData = async (req, res) => {
   try {
