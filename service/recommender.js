@@ -68,3 +68,7 @@ exports.getSimilarItems = async (req, res) => {
 
   return res.json(similarItems);
 };
+
+exports.addNewUserToMatrix = async (userID) => {
+  await kNNRecommender.addNewEmptyUserToDataset(userID);
+};
