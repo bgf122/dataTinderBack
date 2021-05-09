@@ -7,28 +7,28 @@ const cors = require('cors');
 
 app.use(cors());
 const authentication = require('./authentication/authentication');
-const { initializeRecommender } = require('./service/recommender');
+const { initializeRecommender, initializeGenreRecommender } = require('./service/recommender');
 
 require('dotenv/config');
 
-const URL = process.env.TEST_MONGO;
+const URL = process.env.MONGO;
 const programsRoute = require('./routes/programs');
 const suggestionsRoute = require('./routes/suggestions');
 const votesRoute = require('./routes/votes');
-const moviesRoute = require('./routes/movies');
-const seriesRoute = require('./routes/series');
 const recommenderRoute = require('./routes/recommendations');
+const popularRoute = require('./routes/popular')
 
 app.use(express.json());
 morganBody(app);
-initializeRecommender();
 
+initializeRecommender().then(() => console.log("suosittelija initialisoitu"))
+initializeGenreRecommender().then(() => console.log("genresuosittelija initialisoitu"))
 app.use('/api/votes', authentication.verify, votesRoute);
 app.use('/api/programs', authentication.verify, programsRoute);
 app.use('/api/suggestions', authentication.verify, suggestionsRoute);
-app.use('/api/movies', authentication.verify, moviesRoute);
-app.use('/api/series', authentication.verify, seriesRoute);
 app.use('/api/recommendations', authentication.verify, recommenderRoute);
+app.use('/api/popular', authentication.verify, popularRoute);
+
 app.get('/', (req, res) => {
   res.send('Backend is online.');
 });

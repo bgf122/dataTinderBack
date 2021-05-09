@@ -19,7 +19,7 @@ exports.saveUserData = async (req, res) => {
     );
     if (req.body.value === 1) {
       Service.addLikeForUser(res.locals.uid, req.body.programId);
-    } else {
+    } else if (req.body.value === -1) {
       Service.addDislikeForUser(res.locals.uid, req.body.programId);
     }
 
