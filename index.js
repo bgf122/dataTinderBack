@@ -22,7 +22,8 @@ app.use(express.json());
 morganBody(app);
 
 initializeRecommender().then(() => console.log("suosittelija initialisoitu"))
-initializeGenreRecommender().then(() => console.log("genresuosittelija initialisoitu"))
+// initializeGenreRecommender().then(() => console.log("genresuosittelija initialisoitu"))
+
 app.use('/api/votes', authentication.verify, votesRoute);
 app.use('/api/programs', authentication.verify, programsRoute);
 app.use('/api/suggestions', authentication.verify, suggestionsRoute);

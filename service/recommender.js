@@ -24,22 +24,22 @@ exports.initializeRecommender = async () => {
   });
 };
 
-exports.initializeGenreRecommender = async () => {
-  const programData = await Program.aggregate([
-    { $project: { subject: { $concatArrays: ['$subject'] } } },
-  ]);
-  const genres = await Program.distinct('subject.title.fi');
-  programData.forEach((program) => kNNRecommender.addNewEmptyItemAsRowToDataset(program._id));
-  genres.forEach((genre) => kNNRecommender.addNewItemCharacteristicToDataset(genre));
+// exports.initializeGenreRecommender = async () => {
+//   const programData = await Program.aggregate([
+//     { $project: { subject: { $concatArrays: ['$subject'] } } },
+//   ]);
+//   const genres = await Program.distinct('subject.title.fi');
+//   programData.forEach((program) => kNNRecommender.addNewEmptyItemAsRowToDataset(program._id));
+//   genres.forEach((genre) => kNNRecommender.addNewItemCharacteristicToDataset(genre));
 
-  programData.forEach((genre) => genre.subject.forEach((subject) => {
-    try {
-      kNNRecommender.addCharacteristicForItem(genre._id, subject.title.fi);
-    } catch (err) {
-      console.log(err.message);
-    }
-  }));
-}
+//   programData.forEach((genre) => genre.subject.forEach((subject) => {
+//     try {
+//       kNNRecommender.addCharacteristicForItem(genre._id, subject.title.fi);
+//     } catch (err) {
+//       console.log(err.message);
+//     }
+//   }));
+// }
 
 exports.getRecommendation = async (req, res) => {
 
@@ -47,8 +47,7 @@ exports.getRecommendation = async (req, res) => {
   try {
     const recommendations = await kNNRecommender.generateNNewUniqueRecommendationsForUserId(res.locals.uid, 5);
     const recommendedProgram = await Program.findById(recommendations[0].itemId);
-
-    return res.json(recommendedProgram)
+    return res.json(recommendations)
   } catch (err) {
     return res.json({ error: err.message });
   }
@@ -82,3 +81,4 @@ exports.getSimilarItems = async (req, res) => {
 exports.addNewUserToMatrix = async (userID) => {
   await kNNRecommender.addNewEmptyUserToDataset(userID);
 };
+
