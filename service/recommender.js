@@ -3,6 +3,7 @@ const Program = require('../models/program');
 const User = require('../models/user');
 
 const kNNRecommender = new KNNRecommender.default(null);
+const genreRecommender = new KNNRecommender.default(null);
 
 exports.initializeRecommender = async () => {
   const userData = await User.find({});
@@ -24,30 +25,40 @@ exports.initializeRecommender = async () => {
   });
 };
 
-// exports.initializeGenreRecommender = async () => {
-//   const programData = await Program.aggregate([
-//     { $project: { subject: { $concatArrays: ['$subject'] } } },
-//   ]);
-//   const genres = await Program.distinct('subject.title.fi');
-//   programData.forEach((program) => kNNRecommender.addNewEmptyItemAsRowToDataset(program._id));
-//   genres.forEach((genre) => kNNRecommender.addNewItemCharacteristicToDataset(genre));
+exports.initializeGenreRecommender = async () => {
+  const programData = await Program.aggregate([
+    { $project: { subject: { $concatArrays: ['$subject'] } } },
+  ]);
+  const genres = await Program.distinct('subject.title.fi');
+  genres.forEach((genre) => genreRecommender.addNewItemCharacteristicToDataset(genre));
+  programData.forEach((program) => genreRecommender.addNewEmptyItemAsRowToDataset(program._id));
 
-//   programData.forEach((genre) => genre.subject.forEach((subject) => {
-//     try {
-//       kNNRecommender.addCharacteristicForItem(genre._id, subject.title.fi);
-//     } catch (err) {
-//       console.log(err.message);
-//     }
-//   }));
-// }
+
+  programData.forEach((genre) => genre.subject.forEach((subject) => {
+    try {
+      genreRecommender.addCharacteristicForItem(genre._id, subject.title.fi);
+    } catch (err) {
+      console.log(err.message);
+    }
+  }));
+
+  await genreRecommender.initializeRecommender().then(() => {
+    console.log('Genre initialisoitu.');
+  });
+}
 
 exports.getRecommendation = async (req, res) => {
 
-  await kNNRecommender.initializeRecommenderForUserId(res.locals.uid)
+
+    await kNNRecommender.initializeRecommenderForUserId(res.locals.uid)
+  
+
   try {
     const recommendations = await kNNRecommender.generateNNewUniqueRecommendationsForUserId(res.locals.uid, 5);
-    const recommendedProgram = await Program.findById(recommendations[0].itemId);
-    return res.json(recommendations)
+    console.log(recommendations)
+    const recommendedProgram = await Program.findById(recommendations[0]);
+    console.log("Suositus jaettu")
+    return res.json(recommendations[0])
   } catch (err) {
     return res.json({ error: err.message });
   }
@@ -72,8 +83,8 @@ exports.addNewUser = async (userID) => {
 };
 
 exports.getSimilarItems = async (req, res) => {
-  await kNNRecommender.initializeRecommenderForItemId(req.body.programId);
-  const similarItems = await kNNRecommender.getNNearestNeighboursForItemId(req.body.programId, 10);
+  await genreRecommender.initializeRecommenderForItemId(req.body.programId);
+  const similarItems = await genreRecommender.getNNearestNeighboursForItemId(req.body.programId, 10);
 
   return res.json(similarItems);
 };

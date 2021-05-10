@@ -21,8 +21,8 @@ const popularRoute = require('./routes/popular')
 app.use(express.json());
 morganBody(app);
 
-initializeRecommender().then(() => console.log("suosittelija initialisoitu"))
-// initializeGenreRecommender().then(() => console.log("genresuosittelija initialisoitu"))
+initializeRecommender()
+initializeGenreRecommender()
 
 app.use('/api/votes', authentication.verify, votesRoute);
 app.use('/api/programs', authentication.verify, programsRoute);
