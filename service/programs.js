@@ -31,6 +31,7 @@ exports.getPopularPrograms = async (req, res) => {
       { $sort: { count: -1 } },
       { $limit: 10 },
     ]);
+    console.log(userData)
     const programData = async () => Promise.all(userData.map((program) => getSingleProgram(program._id)));
 
     return programData().then((data) => res.json(data));
