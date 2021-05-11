@@ -4,7 +4,8 @@ const morganBody = require('morgan-body');
 
 const app = express();
 const cors = require('cors');
-
+app.use(express.json());
+app.use(express.static("build"));
 app.use(cors());
 const authentication = require('./authentication/authentication');
 const { initializeRecommender, initializeGenreRecommender } = require('./service/recommender');
@@ -16,13 +17,12 @@ const programsRoute = require('./routes/programs');
 const suggestionsRoute = require('./routes/suggestions');
 const votesRoute = require('./routes/votes');
 const recommenderRoute = require('./routes/recommendations');
-const popularRoute = require('./routes/popular')
+const popularRoute = require('./routes/popular');
 
-app.use(express.json());
 morganBody(app);
 
-initializeRecommender()
-initializeGenreRecommender()
+initializeRecommender();
+initializeGenreRecommender();
 
 app.use('/api/votes', authentication.verify, votesRoute);
 app.use('/api/programs', authentication.verify, programsRoute);

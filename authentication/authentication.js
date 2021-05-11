@@ -10,15 +10,15 @@ exports.verify = async (req, res, next) => {
     try {
       Service.addNewUserToMatrix(token);
     } catch (err) {
-      console.log(err.message)
+      console.log(err.message);
     }
   }
 
-  if (token === 'testi' || token === "undefined") {
-    res.locals.uid = 'testi'
-    next()
+  if (token === 'testi' || token === 'undefined') {
+    res.locals.uid = 'testi';
+    next();
   } else {
     res.locals.uid = token;
     next();
   }
-}
+};

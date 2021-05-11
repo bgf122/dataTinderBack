@@ -22,7 +22,7 @@ exports.getProgram = async (req, res) => {
 };
 
 exports.getPopularPrograms = async (req, res) => {
-  console.log("get popular")
+  console.log('get popular');
   try {
     const userData = await User.aggregate([
       { $unwind: '$data' },
@@ -38,4 +38,3 @@ exports.getPopularPrograms = async (req, res) => {
     return res.json({ error: err.message });
   }
 };
-

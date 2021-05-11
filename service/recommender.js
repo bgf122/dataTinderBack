@@ -12,7 +12,6 @@ exports.initializeRecommender = async () => {
   userData.forEach((user) => kNNRecommender.addNewEmptyUserToDataset(user._id));
 
   userData.forEach((user) => user.data.forEach((program) => {
-
     if (program.value === 1) {
       kNNRecommender.addLikeForUserToAnItem(user._id, program.programId);
     } else if (program.value === -1) {
@@ -33,7 +32,6 @@ exports.initializeGenreRecommender = async () => {
   genres.forEach((genre) => genreRecommender.addNewItemCharacteristicToDataset(genre));
   programData.forEach((program) => genreRecommender.addNewEmptyItemAsRowToDataset(program._id));
 
-
   programData.forEach((genre) => genre.subject.forEach((subject) => {
     try {
       genreRecommender.addCharacteristicForItem(genre._id, subject.title.fi);
@@ -45,20 +43,23 @@ exports.initializeGenreRecommender = async () => {
   await genreRecommender.initializeRecommender().then(() => {
     console.log('Genre initialisoitu.');
   });
-}
+};
 
 exports.getRecommendation = async (req, res) => {
-
-
-    await kNNRecommender.initializeRecommenderForUserId(res.locals.uid)
-  
+  await kNNRecommender.initializeRecommenderForUserId(res.locals.uid);
 
   try {
-    const recommendations = await kNNRecommender.generateNNewUniqueRecommendationsForUserId(res.locals.uid, 5);
+    const recommendations = await kNNRecommender.generateNNewUniqueRecommendationsForUserId(res.locals.uid, { amountOfDesiredNewRecommendations: 10 });
     console.log(recommendations)
-    const recommendedProgram = await Program.findById(recommendations[0]);
-    console.log("Suositus jaettu")
-    return res.json(recommendations[0])
+    const ids = recommendations.map(recommendation => recommendation.itemId)
+
+    const recommendedPrograms = await Program.find({
+      '_id': {
+        $in: ids
+      
+    }});
+    console.log('Suositus jaettu');
+    return res.json(recommendedPrograms);
   } catch (err) {
     return res.json({ error: err.message });
   }
@@ -86,10 +87,17 @@ exports.getSimilarItems = async (req, res) => {
   await genreRecommender.initializeRecommenderForItemId(req.body.programId);
   const similarItems = await genreRecommender.getNNearestNeighboursForItemId(req.body.programId, 10);
 
-  return res.json(similarItems);
+  const ids = similarItems.map(similarItem => similarItem.itemId)
+
+    const similarPrograms = await Program.find({
+      '_id': {
+        $in: ids
+      
+    }});
+
+  return res.json(similarPrograms);
 };
 
 exports.addNewUserToMatrix = async (userID) => {
   await kNNRecommender.addNewEmptyUserToDataset(userID);
 };
-
