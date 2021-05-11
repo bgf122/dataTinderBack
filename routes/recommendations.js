@@ -4,6 +4,5 @@ const router = express.Router();
 const service = require('../service/recommender');
 
 router.get('/', service.getRecommendation);
-router.get('/programId/', service.getSimilarItems);
-
+router.get('/programId/:programId', service.getSimilarItems);
 module.exports = router;

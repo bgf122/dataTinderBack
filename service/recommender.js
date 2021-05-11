@@ -84,8 +84,8 @@ exports.addNewUser = async (userID) => {
 };
 
 exports.getSimilarItems = async (req, res) => {
-  await genreRecommender.initializeRecommenderForItemId(req.body.programId);
-  const similarItems = await genreRecommender.getNNearestNeighboursForItemId(req.body.programId, 10);
+  await genreRecommender.initializeRecommenderForItemId(req.params.programId);
+  const similarItems = await genreRecommender.getNNearestNeighboursForItemId(req.params.programId, 10);
   const ids = similarItems.map(similarItem => similarItem.otherRowId)
  
     const similarPrograms = await Program.find({
