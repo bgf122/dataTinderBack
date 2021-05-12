@@ -1,119 +1,106 @@
-[![Contributors][contributors-shield]][contributors-url]
-[![Issues][issues-shield]][issues-url]
+# DataTinder backend
 
-[contributors-shield]: https://img.shields.io/github/contributors/jussihayha/DataTinderit.svg?style=for-the-badge
-[contributors-url]: https://github.com/jussihayha/DataTinderit/graphs/contributors
-[issues-shield]: https://img.shields.io/github/issues/jussihayha/DataTinderit.svg?style=for-the-badge
-[issues-url]: https://github.com/jussihayha/DataTinderit/issues
-[product-screenshot]: images/logo_viritys_transparent.png
+This repository is used to as a backend server for https://github.com/jussihayha/DataTinderit -project.  
+Relies heavily on MongoDB.
+
+This is a simple backend that takes userdata, item data and creates two different recommenders based on them.  
+User recommender uses items so that it compares different users and gives out recommendations on items based on likes.
+
+Item recommender takes characteristics that items have, compares them and returns similar items.
 
 
-![logo](./images/DatatinderiLogo.JPG)
 
-# Tables of contents
-- [Tables of contents](#Tables-of-contents)
-  - [About The Project](#about-the-project)
-  - [Concept](#concept)
-  - [Built With](#built-with)
-- [Getting Started](#getting-started)
-  - [Prerequites frontend](#prerequites-frontend)
-    - [Installation](#installation)
-  - [Prerequitest backend](#Prerequites-backend)
-    - [Installation](#installation)
-- [Usage](#usage)
-- [Roadmap](#roadmap)
-- [Contributing](#contributing)
-- [Lisence](#Lisence)
-- [Authors](#Authors)
-- [Acknowledgements](#Acknowledgements)
-
-## About The Project
-This repository is part of Haaga-Helia University of Applied Sciences' Software Project II course. The aim of the course is to create a new application using open data. 
-
-The business partner of the course was YLE.
-
-We ended up using Yle’s Aarena interface, which provides information on the various materials available through the Aarena. 
-
-## Concept
-We want to provide the user with an application that can utilize the content of Yle Areena. There is a need for the concept, as there is no user-specific recommendation in the Arena. Our app gives recommendations about Yle Arena content to a user who can accept or reject recommended suggestions from Tinder in a familiar way, i.e. by “swiping” them to the right or left of the app screen. If a proposal from an app is "liked" (swip right), the proposal goes to the "liked these" list. If the user opens the app for the first time then the app will briefly say that the user should swap a moment for the programs and then go see what recommendations have been received. After five swaps, the user is prompted to go to the list.
-* The list box contains programs recommended for the user. Recommendations can consist of recommendations from other users.
-* The recommendation mix includes a few recommendations from the knn recommender, a few completely random recommendations, and a few based on what the user has previously liked.
-* The list box can also contain the top 10 most liked programs as well as an example even if the comedies are displayed.
-​
-## Built With
-
-* MongoDB
-* Phyton
-* React-Native
-* Nodejs.
 
 ## Getting Started
-This is an example of how you may give instructions on setting up your project locally. To get a local copy up and running follow these simple example steps
 
-## Prerequitest frontend
-This is an example of how to list things you need to use the software and how to install them.
+These instructions give you an overview on how to take advantage of this repository.  
+Your mileage may wary though and some heavy forking might be necessary to get this up and running for your needs.
 
-  * npm
-    `npm install npm@latest -g`
-  * expo CLI
-    `expo start`
-  * emulator or expo mobile app in your mobile device, See detailed Expo documentation from https://expo.io/
+### Prerequisites
+
+Before you start with this backend you should have a MongoDB database / collection at your disposal.  
+We used Cloud Atlas for our needs and recommend that for you too. Local databases are nice, but having a free cloud db is nicer.
+
+* NPM / Node
+* MongoDB
+* Some data to use - in an ideal situation your data would have some categorized information you can use (genre, type, other adjectives)
+* You have to figure out the way to save your data to MongoDB
+
+You need to have and .env file in the project root that has the MongoDB URL:  
+MONGO=mongodb+srv://<USERNAME>:<PASSWORD>@<YOUR_MONGO_URL>/<YOUR_DB>?retryWrites=true
+
 
 ### Installation
 
-Clone or download this project
-git clone `https://github.com/laurahyvari/DataTinderiFront.git`
+A step by step guide that will tell you how to get the development environment up and running.
 
-navigate to DataTinderiFront directory:
+```
+$ Clone or download this repository
+$ Use terminal of your choice and run npm instal in the project root folder
+$ Install local or get yourself a cloud based MongoDB database
+$ Setup .env file as explained in prerequisites
+$ Redefine Mongo models based on your own schema and needs - current models are found in the models directory. Changing these will require a lot of refactoring.
+$ Start your server locally with npm run dev (for live reload) or npm run start for more persistent 
+```
 
-`cd / path_to / DataTinderiFront`
+## Endpoints
 
-run
+All requests require that you have Authentication header in place.  
+Backend does not verify the header, so this might be something you want to configure.
 
-`npm install`
+We used Firebase during development but ended up going without authentication as we did  
+not want to gather user information and this is a POC project.
 
-`expo start`
+The userdata we collected was very minimal so you might want to expand that also.  
+Think MVP and GDPR.
 
-## Prerequitest backend
-This is an example of how to list things you need to use the software and how to install them.
+$ GET /api/suggestions
+- returns a random item from your data 
+- does not return same data twice, if user has voted / reacted on item
 
-* mongoDB
-* Nodejs.
+$ GET /api/votes
+- gets all 'likes' that an user has made
 
-### Installation
-Clone or download this project
-git clone `https://github.com/bgf122/dataTinderBack.git`
+$ POST /api/votes
+- used for saving user likes, dislikes and neutral votes.
+- like is 1, dislike is -1 and neutral is 0
 
-navigate to DataTinderiFront directory:
+Example POST request
+```JSON
+{
+  "programId": "1234",
+  "type": "movie",
+  "value": 1
+}
+```
+$ GET /api/recommendations
+- tries to return 10 recommendations based on user votes
 
-`cd / path_to / dataTinderBack`
-
-run
-
-`npm install`
-
-
-## Usage
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-## Roadmap
-See the open issues for a list of proposed features (and known issues).
-
-## Contributing
-
-* Fork the Project
-* Create your Feature Branch
-* Commit your Changes
-* Push to the Branch
-* Open a Pull Request
-
-## License
-This is an open source project licensed under ??
-
-## Authors
-Hyvärinen Laura, Häyhä Jussi, Korhonen Pekka, Korhonen Sasu ja Sanden Marketta
-
-## Acknowledgements
-Thanks to YLE for api data.
+$ GET /api/popular
+- tries to get 10 most popular items based on like-votes.
 
 
+
+## Deployment
+
+This backend does not alter item data so that is something you might need to think before deployment.  
+This is your average Node backend server so basic guidelines on how to deploy those apply.
+
+https://www.geeksforgeeks.org/deploying-node-applications/
+
+
+### Server
+
+* Live:
+Example server is running for a short period at https://neksu.vps.webdock.io  
+You can test the endpoints with postman or using the app located in the same url.
+Should you open that link in a browser, I should advice you to use mobile views via Developer Console.
+
+### Branches
+
+* Main branch is the working version and other branches might have content that are no longer viable.
+
+## Acknowledgments
+
+* All credits for the recommender goes to Ohto Rainio and you can find more information from:  
+https://www.npmjs.com/package/knn-recommender
