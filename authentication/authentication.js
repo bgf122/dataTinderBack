@@ -3,6 +3,7 @@ const Service = require('../service/recommender');
 
 exports.verify = async (req, res, next) => {
   const token = req.headers.authorization;
+  console.log(token)
 
   const user = await User.findById(token) || null;
 
