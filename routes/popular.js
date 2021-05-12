@@ -1,7 +1,8 @@
 const express = require('express');
-const router = express.Router();
-const service = require('../service/kmeans');
 
-router.get('/', service.getKmeansSuggestion);
+const router = express.Router();
+const service = require('../service/programs');
+
+router.get('/', service.getPopularPrograms);
 
 module.exports = router;

@@ -1,44 +1,35 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const morgan = require('morgan');
 const morganBody = require('morgan-body');
 
 const app = express();
 const cors = require('cors');
+app.use(express.json());
+app.use(express.static("build"));
+app.use(cors());
 const authentication = require('./authentication/authentication');
-const { initializeApp } = require('./authentication/initializeApp');
-const { initializeKmeans } = require('./service/kmeans');
+const { initializeRecommender, initializeGenreRecommender } = require('./service/recommender');
 
 require('dotenv/config');
 
-const URL = process.env.MONGODB_URI;
+const URL = process.env.MONGO;
 const programsRoute = require('./routes/programs');
 const suggestionsRoute = require('./routes/suggestions');
 const votesRoute = require('./routes/votes');
-const moviesRoute = require('./routes/movies');
-const seriesRoute = require('./routes/series');
-const userRoute = require('./routes/createUser');
-const kmeansRoute = require('./routes/kmeans');
+const recommenderRoute = require('./routes/recommendations');
+const popularRoute = require('./routes/popular');
 
-app.use(
-  morgan(
-    ':method :url :status :res[content-length] - :response-time ms :postData ',
-  ),
-);
-morgan.token('postData', (req) => JSON.stringify(req.body));
-
-app.use(express.json());
 morganBody(app);
-initializeApp();
-initializeKmeans();
-app.use(cors());
-app.use('/register', userRoute);
+
+initializeRecommender();
+initializeGenreRecommender();
+
 app.use('/api/votes', authentication.verify, votesRoute);
 app.use('/api/programs', authentication.verify, programsRoute);
 app.use('/api/suggestions', authentication.verify, suggestionsRoute);
-app.use('/api/movies', authentication.verify, moviesRoute);
-app.use('/api/series', authentication.verify, seriesRoute);
-app.use('/api/kmeans', authentication.verify, kmeansRoute);
+app.use('/api/recommendations', authentication.verify, recommenderRoute);
+app.use('/api/popular', authentication.verify, popularRoute);
+
 app.get('/', (req, res) => {
   res.send('Backend is online.');
 });

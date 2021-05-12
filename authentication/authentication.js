@@ -1,22 +1,24 @@
-const admin = require('firebase-admin');
+const User = require('../models/user');
+const Service = require('../service/recommender');
 
 exports.verify = async (req, res, next) => {
   const token = req.headers.authorization;
 
-  if (token === 'testi') {
-    // Lisätty testiä varten.
+  const user = await User.findById(token) || null;
+
+  if (user === null && token !== 'testi') {
+    try {
+      Service.addNewUserToMatrix(token);
+    } catch (err) {
+      console.log(err.message);
+    }
+  }
+
+  if (token === 'testi' || token === 'undefined') {
     res.locals.uid = 'testi';
     next();
   } else {
-    try {
-      const decodedToken = await admin
-        .auth()
-        .verifyIdToken(token);
-      const { uid } = decodedToken;
-      res.locals.user = await admin.auth().getUser(uid);
-      next();
-    } catch (err) {
-      res.json({ error: err.message });
-    }
+    res.locals.uid = token;
+    next();
   }
 };

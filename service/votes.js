@@ -1,12 +1,12 @@
 const User = require('../models/user');
-const Service = require('./kmeans');
+const Program = require('../models/program');
+const Service = require('./recommender');
 
 exports.saveUserData = async (req, res) => {
   try {
     const newItem = await User.updateOne(
       {
-        _id: res.locals.user.uid,
-        displayName: res.locals.user.displayName,
+        _id: res.locals.uid,
       },
       {
         $push: {
@@ -19,9 +19,9 @@ exports.saveUserData = async (req, res) => {
       }, { upsert: true },
     );
     if (req.body.value === 1) {
-      Service.addLikeForUser(res.locals.user.uid, req.body.programId);
-    } else {
-      Service.addDislikeForUser(res.locals.user.uid, req.body.programId);
+      Service.addLikeForUser(res.locals.uid, req.body.programId);
+    } else if (req.body.value === -1) {
+      Service.addDislikeForUser(res.locals.uid, req.body.programId);
     }
 
     res.json({ savedVote: newItem });
@@ -30,11 +30,29 @@ exports.saveUserData = async (req, res) => {
   }
 };
 
+
 exports.getUserData = async (req, res) => {
   try {
-    const data = await User.find({ _id: req.body._id });
-    res.json(data);
+    const data = await User.aggregate([
+      { $unwind: '$data' },
+      { $match: { 'data.value': 1, _id: req.body._id } },
+      { $group: { _id: '$data.programId' } }
+
+
+    ]);
+    const ids = data.map(like => like._id)
+
+
+    const likedPrograms = await Program.find({
+      '_id': {
+        $in: ids
+
+      }
+    });
+
+    res.json(likedPrograms);
   } catch (err) {
     res.json({ error: err.message });
   }
 };
+

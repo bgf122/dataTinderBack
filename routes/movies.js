@@ -1,9 +1,0 @@
-const express = require('express');
-
-const router = express.Router();
-const service = require('../service/movies');
-
-router.get('/', service.getAllMovies);
-router.get('/top', service.getPopularMovies);
-
-module.exports = router;
