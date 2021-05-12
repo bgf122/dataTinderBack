@@ -51,7 +51,7 @@ exports.getRecommendation = async (req, res) => {
   try {
     const recommendations = await kNNRecommender.generateNNewUniqueRecommendationsForUserId(res.locals.uid, { amountOfDesiredNewRecommendations: 10 });
     console.log(recommendations)
-    const ids = recommendations.map(recommendation => recommendation.itemId)
+    const ids = await recommendations.map(recommendation => recommendation.itemId)
 
     const recommendedPrograms = await Program.find({
       '_id': {
