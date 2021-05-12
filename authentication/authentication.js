@@ -2,7 +2,7 @@ const User = require('../models/user');
 const Service = require('../service/recommender');
 
 exports.verify = async (req, res, next) => {
-  const token = req.headers.Authorization;
+  const token = req.headers.authorization;
   const user = await User.findById(token) || null;
 
   if (user === null && token === undefined) {
