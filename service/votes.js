@@ -32,15 +32,16 @@ exports.saveUserData = async (req, res) => {
 
 
 exports.getUserData = async (req, res) => {
-  try {
+  
+try {
     const data = await User.aggregate([
       { $unwind: '$data' },
-      { $match: { 'data.value': 1, _id: req.body._id } },
+      { $match: { 'data.value': 1, _id: res.locals.uid } },
       { $group: { _id: '$data.programId' } }
 
 
     ]);
-    const ids = data.map(like => like._id)
+    const ids = await data.map(like => like._id)
 
 
     const likedPrograms = await Program.find({
