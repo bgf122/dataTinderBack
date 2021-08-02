@@ -88,14 +88,6 @@ This is your average Node backend server so basic guidelines on how to deploy th
 
 https://www.geeksforgeeks.org/deploying-node-applications/
 
-
-### Server
-
-* Live:
-Example server is running for a short period at https://neksu.vps.webdock.io  
-You can test the endpoints with postman or using the app located in the same url.
-Should you open that link in a browser, I should advice you to use mobile views via Developer Console.
-
 ### Branches
 
 * Main branch is the working version and other branches might have content that are no longer viable.
